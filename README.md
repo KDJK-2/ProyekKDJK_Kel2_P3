@@ -1,4 +1,22 @@
-# Penerapan Blinko pada Azure Virtual Machine
+<p align="center">
+  <img src="images/home.png" alt="Tampilan Blinko di desktop dan ponsel" width="100%">
+</p>
+
+<h1 align="center">Blinko</h1>
+
+<p align="center">Penerapan Blinko pada Azure Virtual Machine</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Azure-Virtual_Machine-0078D4?logo=microsoftazure&logoColor=white" alt="Azure Virtual Machine">
+  <img src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white" alt="Docker Compose">
+  <img src="https://img.shields.io/badge/HTTPS-Caddy-1F88C0?logo=caddy&logoColor=white" alt="HTTPS melalui Caddy">
+</p>
+
+<p align="center">
+  <a href="https://blinko-kdjk.australiaeast.cloudapp.azure.com/">Buka aplikasi</a> •
+  <a href="https://github.com/blinkospace/blinko">Repositori Blinko</a> •
+  <a href="https://docs.blinko.space/">Dokumentasi Blinko</a>
+</p>
 
 Proyek kelompok mata kuliah KDJK: memasang aplikasi catatan [Blinko](https://github.com/blinkospace/blinko) pada Azure Virtual Machine agar dapat diakses melalui internet. Repositori ini mendokumentasikan **deployment** dan berisi konfigurasi Docker Compose serta Caddy yang digunakan. Kode aplikasi Blinko tetap berasal dari proyek resminya melalui image Docker `blinkospace/blinko`.
 
