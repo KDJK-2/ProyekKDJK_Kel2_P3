@@ -1,0 +1,3 @@
+{$BLINKO_HOST} {
+    reverse_proxy blinko:1111
+}

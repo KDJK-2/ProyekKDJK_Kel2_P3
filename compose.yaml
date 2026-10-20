@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:14
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: blinko
+      POSTGRES_USER: blinko
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U blinko -d blinko"]
+      interval: 5s
+      retries: 10
+
+  blinko:
+    image: blinkospace/blinko:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      NEXTAUTH_URL: https://${BLINKO_HOST}
+      NEXT_PUBLIC_BASE_URL: https://${BLINKO_HOST}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      DATABASE_URL: postgresql://blinko:${POSTGRES_PASSWORD}@db:5432/blinko
+      TRUST_PROXY: "1"
+    volumes:
+      - blinko_data:/app/.blinko
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - blinko
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      BLINKO_HOST: ${BLINKO_HOST}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  db_data:
+  blinko_data:
+  caddy_data:
+  caddy_config:
