@@ -22,13 +22,13 @@ Proyek kelompok mata kuliah KDJK: memasang aplikasi catatan [Blinko](https://git
 
 ## Anggota kelompok
 
-| NIM | Nama |
-| --- | --- |
+| NIM         | Nama                           |
+| ----------- | ------------------------------ |
 | M0403241025 | ALDEN NARA NABIHA KAYANA HYLMI |
-| M0403241026 | Taufiq Sadri |
-| M0403241029 | Azka Julian Putra Wahyudi |
-| M0403241030 | JEREMY TJAHJANA |
-| M0403241032 | NASYWA AZZAHRA NAADHIRAH |
+| M0403241026 | Taufiq Sadri                   |
+| M0403241029 | Azka Julian Putra Wahyudi      |
+| M0403241030 | JEREMY TJAHJANA                |
+| M0403241032 | NASYWA AZZAHRA NAADHIRAH       |
 
 ## Sekilas tentang Blinko
 
@@ -40,17 +40,17 @@ Alamat aplikasi: **https://blinko-kdjk.australiaeast.cloudapp.azure.com/**
 
 ## Spesifikasi dan arsitektur
 
-| Komponen | Konfigurasi yang digunakan |
-| --- | --- |
-| Cloud | Azure for Students, region Australia East |
-| Resource group | `jeremyauto_group` |
-| VM | `blinklocal`, Standard B2als v2, 2 vCPU, 4 GiB RAM |
-| Sistem operasi | Ubuntu Server 24.04 LTS x64; saat diperiksa: Ubuntu 24.04.5 LTS |
-| Akses administrasi | SSH dengan key pair, pengguna `jeremytj` |
-| Public IP | `20.53.245.48`, assignment Static |
-| DNS | `blinko-kdjk.australiaeast.cloudapp.azure.com` |
-| Port masuk | TCP 22 (SSH), 80 (HTTP), 443 (HTTPS) |
-| Aplikasi | Docker Compose: Blinko, PostgreSQL 14, Caddy 2 |
+| Komponen           | Konfigurasi yang digunakan                                      |
+| ------------------ | --------------------------------------------------------------- |
+| Cloud              | Azure for Students, region Australia East                       |
+| Resource group     | `jeremyauto_group`                                              |
+| VM                 | `blinklocal`, Standard B2als v2, 2 vCPU, 4 GiB RAM              |
+| Sistem operasi     | Ubuntu Server 24.04 LTS x64; saat diperiksa: Ubuntu 24.04.5 LTS |
+| Akses administrasi | SSH dengan key pair, pengguna `jeremytj`                        |
+| Public IP          | `20.53.245.48`, assignment Static                               |
+| DNS                | `blinko-kdjk.australiaeast.cloudapp.azure.com`                  |
+| Port masuk         | TCP 22 (SSH), 80 (HTTP), 443 (HTTPS)                            |
+| Aplikasi           | Docker Compose: Blinko, PostgreSQL 14, Caddy 2                  |
 
 ```mermaid
 flowchart LR
@@ -127,7 +127,7 @@ File [`compose.yaml`](compose.yaml) berisi tiga layanan:
 2. `blinko`: image `blinkospace/blinko:latest`, terhubung ke database melalui nama layanan `db`.
 3. `caddy`: menerima HTTP/HTTPS dan meneruskan permintaan ke Blinko.
 
-File [`Caddyfile`](Caddyfile) menentukan domain dan tujuan reverse proxy `blinko:1111`. Caddy menangani HTTPS pada domain tersebut. Di Compose, layanan Blinko menunggu database mencapai status *healthy* sebelum berjalan.
+File [`Caddyfile`](Caddyfile) menentukan domain dan tujuan reverse proxy `blinko:1111`. Caddy menangani HTTPS pada domain tersebut. Di Compose, layanan Blinko menunggu database mencapai status _healthy_ sebelum berjalan.
 
 ### 7. Menjalankan dan memeriksa layanan
 
@@ -150,22 +150,75 @@ Pemakaian OpenAI API menggunakan kuota akun OpenAI yang dikonfigurasi pada Blink
 
 ## Cara pemakaian
 
-1. Buka alamat Blinko melalui browser dan masuk menggunakan akun masing-masing.
-2. Buat catatan melalui menu **Blinko** atau **Notes**; gunakan **Todo** untuk tugas.
-3. Buka menu **AI** untuk mengajukan pertanyaan tentang catatan. Model embedding membantu pencarian konteks dari catatan.
-4. Administrator mengelola akun di **Settings → User List** dan model di **Settings → AI**.
+Antarmuka Blinko sederhana dan mudah dipahami. Menu utama ada di sidebar kiri, dan di bawahnya terdapat daftar **All Tags**. Di kanan atas tersedia pencarian cepat (**Ctrl + K**), filter catatan, dan tombol untuk mengganti tema terang/gelap.
+
+### Login
+
+Sebelum memakai Blinko, pengguna masuk dengan akun yang sudah didaftarkan. Akun pertama yang mendaftar otomatis menjadi `superadmin`.
+
+![Halaman login Blinko](images/blinko-login.png)
+
+### Blinko (halaman utama)
+
+Setelah login, pengguna masuk ke halaman **Blinko**, tempat menulis catatan cepat atau ide singkat. Editor di bagian atas (_"I have a new idea..."_) menyediakan toolbar Markdown: heading, bold, italic, strikethrough, link, list, checklist, tabel, dan code block. Di bawah editor ada tombol tag `#`, link, upload file, dan rekam suara. Ikon di kiri bawah editor menentukan tipe catatan, yaitu Blinko, Note, atau Todo.
+
+Setiap catatan tampil sebagai kartu. Kartu dapat memuat tag bertingkat seperti `#Welcome/Attachment` dan `#Welcome/Code`, lampiran gambar, preview link (misalnya repositori GitHub), serta code block dengan syntax highlighting. Tiap kartu memiliki aksi copy, komentar, share, hapus, dan menu lainnya.
+
+![Halaman utama Blinko berisi kartu catatan dengan tag, gambar, link, dan kode](images/Blinko.png)
+
+### Notes
+
+Menu **Notes** dipakai untuk catatan yang lebih panjang dan disimpan permanen, misalnya materi kuliah atau notulen rapat. Editornya sama dengan halaman Blinko, hanya tipe catatannya **Note**.
+
+![Halaman Notes berisi catatan](images/Notes.png)
+
+### Todo
+
+Menu **Todo** berisi daftar tugas yang dikelompokkan per hari (misalnya **Today**). Tugas dapat ditandai selesai lewat lingkaran di sebelah tanggal. Riwayat perubahan bisa dilihat dari ikon history pada kartu.
+
+![Halaman Todo berisi tugas project KDJK](images/Todo.png)
+
+### AI
+
+Menu **AI** menyediakan chat dengan asisten AI yang dapat mencari dan menjawab berdasarkan isi catatan pengguna. Fitur ini memakai model chat dan model embedding yang diatur di **Settings → AI**. Tersedia preset **Writing**, **Coding**, dan **Translation**, serta ikon untuk chat baru, pencarian mendalam, pencarian web, tools, dan mention `@` untuk merujuk catatan tertentu.
+
+![Halaman AI chat Blinko](images/AI.png)
+
+### Analytics
+
+Menu **Analytics** menampilkan statistik penulisan: jumlah catatan (_Note Count_), total kata, kata terbanyak dalam sehari, dan jumlah hari aktif. Di bawahnya ada _heatmap_ jumlah catatan per hari selama setahun dan diagram **Tag Distribution** yang menunjukkan proporsi tiap tag.
+
+![Halaman Analytics berisi statistik, heatmap, dan distribusi tag](images/Analytics.png)
+
+### Resources
+
+Menu **Resources** berfungsi sebagai pengelola file untuk semua lampiran yang diunggah ke catatan. Setiap file ditampilkan beserta tipe, ukuran, dan tanggal unggah. File bisa dikelompokkan dengan **New Folder** atau dipilih sekaligus dengan **Select All**.
+
+![Halaman Resources berisi daftar file lampiran](images/Resources.png)
+
+### Archived
+
+Catatan atau todo yang sudah tidak aktif dapat diarsipkan supaya halaman utama tetap rapi. Semua arsip tampil di menu **Archived** dan dapat dikembalikan bila diperlukan.
+
+![Halaman Archived berisi todo yang diarsipkan](images/Archived.png)
+
+### Pengaturan (Settings)
+
+Administrator mengelola akun di **Settings → User List** (misalnya membuat akun untuk anggota kelompok lewat **Create User**) dan mengatur penyedia serta model AI di **Settings → AI**.
+
+![Halaman Settings Blinko](images/Settings.png)
 
 ## Pengujian
 
-| Pemeriksaan | Hasil |
-| --- | --- |
-| Resolusi DNS | Domain mengarah ke `20.53.245.48` |
-| SSH | Koneksi ke VM berhasil setelah izin private key menjadi `600` |
-| Docker Compose | Layanan `db`, `blinko`, dan `caddy` berstatus Up |
-| Database | Healthcheck PostgreSQL berstatus healthy |
-| HTTPS | Halaman publik merespons `HTTP/2 200` melalui Caddy |
-| Aplikasi | Halaman login terbuka; akun pertama berhasil digunakan |
-| AI | Halaman chat AI dapat digunakan setelah model dikonfigurasi |
+| Pemeriksaan    | Hasil                                                         |
+| -------------- | ------------------------------------------------------------- |
+| Resolusi DNS   | Domain mengarah ke `20.53.245.48`                             |
+| SSH            | Koneksi ke VM berhasil setelah izin private key menjadi `600` |
+| Docker Compose | Layanan `db`, `blinko`, dan `caddy` berstatus Up              |
+| Database       | Healthcheck PostgreSQL berstatus healthy                      |
+| HTTPS          | Halaman publik merespons `HTTP/2 200` melalui Caddy           |
+| Aplikasi       | Halaman login terbuka; akun pertama berhasil digunakan        |
+| AI             | Halaman chat AI dapat digunakan setelah model dikonfigurasi   |
 
 ## Pemeliharaan dan biaya
 
