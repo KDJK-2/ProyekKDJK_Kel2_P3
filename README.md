@@ -184,9 +184,69 @@ Data aplikasi berada pada volume Docker. Penghapusan VM, disk, atau volume dapat
 
 ## Pembahasan
 
-**Kelebihan:** aplikasi dapat diakses dari perangkat lain melalui HTTPS, data utama tersimpan di VM yang dikelola sendiri, dan Docker Compose memisahkan aplikasi, database, serta reverse proxy sehingga konfigurasi mudah dijelaskan dan dijalankan ulang.
+### Kelebihan Blinko
 
-**Keterbatasan:** ketersediaan bergantung pada VM dan kredit Azure. VM ini tidak memakai redundansi atau backup otomatis. Pengelola juga bertanggung jawab menjaga pembaruan image, akses SSH, API key, dan pencadangan data. OpenAI API memakai kuota tersendiri.
+1. **AI Terintegrasi:** Blinko memiliki fitur AI bawaan yang dapat dihubungkan dengan penyedia seperti OpenAI. Pengguna dapat bertanya kepada AI berdasarkan catatan yang telah dibuat, sehingga catatan lama tetap mudah ditemukan dan dimanfaatkan tanpa perlu plugin tambahan.
+
+2. **Self-Hosted dan Open Source:** Seluruh data catatan, file, dan database tersimpan di server yang dikelola sendiri. Tidak ada pihak ketiga yang dapat mengakses data pengguna. Kode sumber Blinko bersifat terbuka (MIT License) sehingga dapat diperiksa, dimodifikasi, dan didistribusikan secara bebas.
+
+3. **Catatan Cepat (Micro-Notes):** Blinko menyediakan fitur catatan kilat bergaya timeline yang memudahkan pengguna menangkap ide secara spontan. Konsep ini mirip media sosial pribadi, di mana pengguna dapat menulis, menambahkan tag, dan melampirkan file dengan cepat.
+
+4. **Deployment Sederhana dengan Docker Compose:** Seluruh aplikasi (Blinko, PostgreSQL, Caddy) dapat dijalankan dengan satu perintah `docker compose up -d`. Konfigurasi layanan, volume, dan jaringan sudah ditentukan dalam satu file `compose.yaml`, sehingga proses instalasi dan pemeliharaan menjadi mudah.
+
+5. **HTTPS Otomatis melalui Caddy:** Caddy sebagai reverse proxy menangani sertifikat SSL secara otomatis dari Let's Encrypt. Pengguna tidak perlu mengonfigurasi sertifikat secara manual; cukup menyediakan nama domain dan Caddy akan mengurus sisanya.
+
+6. **Analitik dan Heatmap Produktivitas:** Blinko menyediakan halaman Analytics yang menampilkan jumlah catatan, total kata, dan heatmap aktivitas harian selama satu tahun. Fitur ini membantu pengguna memantau konsistensi menulis catatan.
+
+### Kekurangan Blinko
+
+1. **Tidak Mendukung Kolaborasi Real-Time:** Blinko dirancang sebagai aplikasi catatan pribadi. Tidak ada fitur untuk mengedit satu catatan secara bersamaan oleh beberapa pengguna seperti yang tersedia di Google Docs atau Notion.
+
+2. **Membutuhkan Server dan Pengetahuan Teknis:** Pengguna harus menyediakan server sendiri (VPS atau VM) dan memahami dasar-dasar Docker, terminal Linux, serta pengelolaan server untuk melakukan instalasi dan pemeliharaan.
+
+3. **Belum Memiliki Aplikasi Mobile Native:** Blinko hanya dapat diakses melalui browser (Progressive Web App). Tidak tersedia aplikasi native di Google Play Store atau Apple App Store, sehingga pengalaman di perangkat mobile kurang optimal dibandingkan aplikasi yang memiliki native app.
+
+4. **Ketersediaan Bergantung pada Server:** Jika VM atau server mati, aplikasi tidak dapat diakses. Pada proyek ini, ketersediaan bergantung pada kredit Azure for Students dan status VM. Tidak ada redundansi atau failover otomatis.
+
+5. **Komunitas dan Ekosistem Masih Kecil:** Dibandingkan dengan aplikasi catatan populer seperti Notion atau Obsidian yang memiliki jutaan pengguna, komunitas Blinko masih dalam tahap awal. Jumlah plugin, tema, dan dokumentasi dari komunitas masih terbatas.
+
+### Perbandingan Blinko dengan Aplikasi Web Sejenis
+
+#### 1. Blinko vs Memos
+
+- **Kelebihan Blinko:**
+    - **AI Bawaan:** Blinko memiliki integrasi AI untuk bertanya berdasarkan catatan. Memos tidak memiliki fitur AI bawaan, sehingga pengguna harus mencari catatan secara manual.
+    - **Manajemen File (Resources):** Blinko menyediakan halaman Resources untuk mengelola file dan gambar yang diunggah. Memos tidak memiliki halaman pengelola file terpisah.
+    - **Fitur Todo Terpisah:** Blinko memisahkan catatan biasa, catatan cepat, dan daftar tugas ke dalam menu yang berbeda, sehingga lebih terorganisasi.
+
+- **Kelebihan Memos:**
+    - **Lebih Ringan:** Memos menggunakan SQLite secara bawaan sehingga tidak membutuhkan PostgreSQL terpisah. Penggunaan sumber daya server lebih kecil.
+    - **Komunitas Lebih Besar:** Memos memiliki lebih banyak kontributor dan pengguna di GitHub, sehingga pembaruan dan perbaikan bug lebih sering dirilis.
+    - **API Terbuka:** Memos menyediakan REST API yang terdokumentasi dengan baik untuk integrasi dengan aplikasi lain.
+
+#### 2. Blinko vs Notion
+
+- **Kelebihan Blinko:**
+    - **Privasi Data:** Seluruh data tersimpan di server sendiri dan tidak dikirim ke pihak ketiga. Notion menyimpan data di server cloud mereka di luar kendali pengguna.
+    - **Gratis Sepenuhnya:** Blinko bersifat open source dan gratis tanpa batasan fitur. Notion menerapkan model freemium di mana fitur seperti Notion AI dan ruang kerja tim memerlukan langganan berbayar ($8–10 per bulan).
+    - **Tanpa Ketergantungan Vendor:** Pengguna tidak bergantung pada kebijakan atau kelangsungan bisnis Notion. Jika Notion menghentikan layanannya, pengguna kehilangan akses. Dengan Blinko, data tetap berada di server sendiri.
+
+- **Kelebihan Notion:**
+    - **Kolaborasi Real-Time:** Notion mendukung pengeditan dokumen secara bersamaan oleh beberapa pengguna dalam satu workspace, lengkap dengan komentar dan mention.
+    - **Database dan Tampilan Fleksibel:** Notion menyediakan fitur database bawaan dengan berbagai tampilan (tabel, kalender, kanban, galeri) yang tidak dimiliki Blinko.
+    - **Aplikasi Native dan Ekosistem Luas:** Notion tersedia sebagai aplikasi native di desktop dan mobile dengan ekosistem template, integrasi, dan komunitas yang sangat besar.
+
+#### 3. Blinko vs Joplin
+
+- **Kelebihan Blinko:**
+    - **Antarmuka Web Modern:** Blinko memiliki tampilan web yang modern dan responsif. Joplin menggunakan antarmuka desktop yang tampak lebih tradisional dan kurang interaktif.
+    - **AI Terintegrasi:** Blinko dapat memanfaatkan AI untuk mencari dan bertanya berdasarkan isi catatan. Joplin tidak memiliki fitur AI bawaan.
+    - **Akses dari Mana Saja via Browser:** Blinko berjalan sebagai aplikasi web sehingga dapat diakses dari perangkat apa pun yang memiliki browser, tanpa perlu memasang aplikasi.
+
+- **Kelebihan Joplin:**
+    - **Aplikasi Native Desktop dan Mobile:** Joplin tersedia sebagai aplikasi native di Windows, macOS, Linux, Android, dan iOS. Pengalaman pengguna di perangkat mobile lebih baik dibandingkan PWA Blinko.
+    - **Enkripsi End-to-End:** Joplin mendukung enkripsi end-to-end (E2EE) untuk catatan yang disinkronisasikan, memberikan lapisan keamanan tambahan yang belum tersedia di Blinko.
+    - **Sinkronisasi Fleksibel:** Joplin mendukung berbagai layanan sinkronisasi seperti Nextcloud, Dropbox, OneDrive, dan WebDAV. Pengguna dapat memilih layanan yang sesuai tanpa harus mengelola server sendiri.
 
 ## Keamanan berkas repositori
 
