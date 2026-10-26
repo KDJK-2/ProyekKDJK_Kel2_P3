@@ -75,8 +75,8 @@ Di Azure Portal dibuat VM `blinklocal` pada resource group `jeremyauto_group` di
 Azure menyediakan private key `blinklocal_key.pem`. Pada laptop Linux, izin file key dibatasi agar SSH mau menggunakannya:
 
 ```bash
-chmod 600 ~/Downloads/blinklocal_key.pem
-ssh -i ~/Downloads/blinklocal_key.pem jeremytj@20.53.245.48
+chmod 600 ~/.ssh/<nama-key>.pem
+ssh -i ~/.ssh/<nama-key>.pem <username>@<IP-PUBLIK-VPS>
 ```
 
 Private key tersebut **tidak** dimasukkan ke repositori ini.
